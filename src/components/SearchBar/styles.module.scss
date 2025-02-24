@@ -1,0 +1,45 @@
+.searchBarContainer {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.searchBar {
+  display: flex;
+  width: 100%;
+  max-width: 800px;
+  align-items: center;
+  border-radius: 5px;
+  overflow: hidden;
+
+  input {
+    flex: 4;
+    padding: 8px;
+    border: none;
+    outline: none;
+  }
+
+  .searchIcons {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+
+    button {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 2rem;
+      padding: 5px;
+
+      &.active {
+        font-weight: bold;
+      }
+    }
+  }
+}
