@@ -1,24 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './styles.module.scss';
 
 const getGreeting = () => {
   const name = "User";
   const hours = new Date().getHours();
-  let greeting = "Hello there.";
-
-  if ( hours >= 0 && hours < 8) greeting = `Good Morning, ${name}`;
-  else if ( hours >= 8 && hours < 12) greeting = `Good Aftermorning, ${name}`;
-  else if ( hours >= 12 && hours < 18 ) greeting = `Good Afternoon, ${name}`;
-  else if ( hours >= 18 && hours < 22) greeting = `Good Evening, ${name}`;
-  else greeting = `It's Late Evening, ${name}`;
-
-  return greeting;
+  
+  if (hours >= 0 && hours < 8) return `Good Morning, ${name}`;
+  if (hours >= 8 && hours < 12) return `Good Aftermorning, ${name}`;
+  if (hours >= 12 && hours < 18) return `Good Afternoon, ${name}`;
+  if (hours >= 18 && hours < 22) return `Good Evening, ${name}`;
+  
+  return `It's Late Evening, ${name}`;
 };
 
 const Greeting = () => {
+  const [greeting, setGreeting] = useState(getGreeting());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setGreeting(getGreeting());
+    }, 3600000); // Check hourly
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className={styles.greetingContainer}>
-      <h2 className={styles.greetingMessage}>{getGreeting()}</h2>
+      <h2 className={styles.greetingMessage}>{greeting}</h2>
     </div>
   );
 };
