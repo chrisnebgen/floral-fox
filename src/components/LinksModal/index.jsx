@@ -31,9 +31,15 @@ const LinksModal = ({ linksData, setLinksData, closeModal }) => {
 
   const addLink = (categoryIndex) => {
     setEditableLinks((prevLinks) => {
-      const updatedLinks = [...prevLinks];
-      updatedLinks[categoryIndex].links.push({ label: 'New Link', url: 'https://' });
-      return updatedLinks;
+      return prevLinks.map((category, index) => {
+        if (index === categoryIndex) {
+          return {
+            ...category,
+            links: [...category.links, { label: 'New Link', url: 'https://' }]
+          };
+        }
+        return category;
+      });
     });
   };
 
