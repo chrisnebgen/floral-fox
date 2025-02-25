@@ -1,0 +1,16 @@
+@use './variables';
+@use './mixins';
+@use './typography';
+
+body {
+  background-color: variables.$background;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  font-family: typography.$font-family;
+  color: variables.$font-color;
+}
