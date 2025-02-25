@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 
-const CoverImage = () => {
+const DEFAULT_IMAGE = 'https://via.placeholder.com/1200x300';
+
+const CoverImage = ({ coverImage }) => {
+  const [imageSrc, setImageSrc] = useState(coverImage || DEFAULT_IMAGE);
+
+  useEffect(() => {
+    setImageSrc(coverImage || DEFAULT_IMAGE);
+  }, [coverImage]);
+
+  const handleError = () => {
+    setImageSrc(DEFAULT_IMAGE);
+  };
+
   return (
-    <div className={styles.coverImage}>
-      <img src="https://fakeimg.pl/1280x300" alt="Cover Image" />
+    <div
+      className={styles.coverImage}
+      style={{ backgroundImage: `url(${imageSrc})` }}
+    >
+      <img src={imageSrc} alt="Cover" onError={handleError} className={styles.hiddenImg} />
     </div>
   );
 };
