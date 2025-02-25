@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
+import { FaGoogle, FaFeather } from 'react-icons/fa';
+import { DiBingSmall } from 'react-icons/di';
 import styles from './styles.module.scss';
 
 const SearchBar = () => {
   const [query, setQuery] = useState('');
 
   const searchEngines = {
-    google: 'https://www.google.com/search?q=',
-    bing: 'https://www.bing.com/search?q=',
-    duckduckgo: 'https://duckduckgo.com/?q='
+    google: { url: 'https://www.google.com/search?q=', icon: <FaGoogle /> },
+    bing: { url: 'https://www.bing.com/search?q=', icon: <DiBingSmall /> },
+    duckduckgo: { url: 'https://duckduckgo.com/?q=', icon: <FaFeather /> }
   };
 
   const handleSearch = (engine) => {
     if (query.trim() !== '') {
-      window.open(searchEngines[engine] + encodeURIComponent(query), '_blank');
+      window.open(searchEngines[engine].url + encodeURIComponent(query), '_blank');
     }
   };
 
@@ -31,8 +33,9 @@ const SearchBar = () => {
               key={engine}
               type="button"
               onClick={() => handleSearch(engine)}
+              className={styles.iconButton}
             >
-              {engine.charAt(0).toUpperCase()}
+              {searchEngines[engine].icon}
             </button>
           ))}
         </div>
