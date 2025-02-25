@@ -1,0 +1,150 @@
+@use '../../styles/variables';
+@use 'sass:color';
+
+.settingsButton {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: variables.$default;
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out;
+
+  &:hover {
+    color: variables.$font-color;
+  }
+
+  &.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.settingsPanel {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 280px;
+  height: 100%;
+  background: color.adjust(variables.$background, $lightness: 10%);
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+  transition: right 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: flex-start;
+  z-index: 999;
+}
+
+.settingsPanel.open {
+  right: 0;
+}
+
+.settingsHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.settingsTitle {
+  font-size: 1.5rem;
+  color: variables.$default;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.closeButton {
+  position: absolute;
+  right: 0;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: variables.$default;
+
+  &:hover {
+    color: variables.$error;
+  }
+}
+
+.settingsContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  padding-top: 10px;
+}
+
+.settingsForm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settingsLabel {
+  font-size: 0.85rem;
+  color: variables.$default;
+  font-weight: bold;
+  align-self: flex-start;
+}
+
+.settingsInput {
+  width: 100%;
+  max-width: 200px;
+  height: 30px;
+  max-height: 1.5rem;
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid variables.$default;
+  font-size: 0.9rem;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: nowrap;
+}
+
+.saveButton,
+.cancelButton {
+  flex: 1;
+  padding: 6px;
+  border-radius: 5px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9rem;
+  width: 50%;
+  min-width: 100px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+
+.saveButton {
+  background: variables.$success;
+  color: variables.$font-color;
+
+  &:hover {
+    background: color.adjust(variables.$success, $lightness: -10%);
+  }
+}
+
+.cancelButton {
+  background: variables.$error;
+  color: variables.$font-color;
+
+  &:hover {
+    background: color.adjust(variables.$error, $lightness: -10%);
+  }
+}

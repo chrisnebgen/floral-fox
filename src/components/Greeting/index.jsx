@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles.module.scss';
 
-const getGreeting = () => {
-  const name = "User";
+const getGreeting = (name) => {
   const hours = new Date().getHours();
-  
+
   if (hours >= 0 && hours < 8) return `Good Morning, ${name}`;
   if (hours >= 8 && hours < 12) return `Good Aftermorning, ${name}`;
   if (hours >= 12 && hours < 18) return `Good Afternoon, ${name}`;
@@ -13,16 +12,16 @@ const getGreeting = () => {
   return `It's Late Evening, ${name}`;
 };
 
-const Greeting = () => {
-  const [greeting, setGreeting] = useState(getGreeting());
+const Greeting = ({ userName }) => {
+  const [greeting, setGreeting] = useState(getGreeting(userName));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setGreeting(getGreeting());
-    }, 3600000); // Check hourly
+      setGreeting(getGreeting(userName));
+    }, 3600000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [userName]);
 
   return (
     <div className={styles.greetingContainer}>
