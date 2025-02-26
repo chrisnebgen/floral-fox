@@ -2,45 +2,48 @@ const GITHUB_API_URL = "https://api.github.com";
 const GIST_FILENAME = "custom-start-user-settings.json";
 
 /**
- * Fetches all Gists for the authenticated user and finds an existing settings Gist.
- * @returns {Array} A list of existing Gists matching the description.
+ * Retrieves the GitHub token from localStorage.
+ * @returns {string|null} The GitHub token, or null if missing.
  */
-export const getUserGists = async () => {
+const getGitHubToken = () => {
   const token = localStorage.getItem("githubToken");
-  if (!token) return [];
+  if (!token) {
+    alert("GitHub authentication required. Please log in.");
+    throw new Error("GitHub token is missing.");
+  }
+  return token;
+};
 
+/**
+ * Fetches all Gists for the authenticated user and finds an existing settings Gist.
+ * @returns {Object|null} The existing Gist object if found, otherwise null.
+ */
+export const getUserSettingsGist = async () => {
   try {
+    const token = getGitHubToken();
     const response = await fetch(`${GITHUB_API_URL}/gists`, {
       headers: { Authorization: `token ${token}` },
     });
 
-    if (!response.ok) throw new Error("Failed to fetch Gists");
+    if (!response.ok) throw new Error("Failed to fetch user Gists");
 
     const gists = await response.json();
-    return gists.filter((gist) => gist.description === "User settings backup for Custom Start Page");
+    return gists.find((gist) => gist.description === "User settings backup for Custom Start Page") || null;
   } catch (error) {
     console.error("Error fetching user Gists:", error);
-    return [];
+    return null;
   }
 };
 
 /**
- * Creates a new GitHub Gist with user settings or updates an existing one.
+ * Creates a new GitHub Gist with user settings.
  * @param {Object} settings - The settings to save.
  * @returns {string|null} The Gist ID if successful, null otherwise.
  */
-export const createOrUpdateGist = async (settings) => {
-  const token = localStorage.getItem("githubToken");
-  if (!token) return alert("GitHub authentication required."), null;
-
-  const existingGists = await getUserGists();
-  if (existingGists.length > 0) {
-    const existingGistID = existingGists[0].id;
-    console.log("Existing Gist found. Updating instead.");
-    return (await updateGist(existingGistID, settings)) ? existingGistID : null;
-  }
-
+export const createGist = async (settings) => {
   try {
+    const token = getGitHubToken();
+
     const response = await fetch(`${GITHUB_API_URL}/gists`, {
       method: "POST",
       headers: {
@@ -59,6 +62,7 @@ export const createOrUpdateGist = async (settings) => {
     if (!response.ok) throw new Error("Failed to create Gist");
 
     const data = await response.json();
+    localStorage.setItem("gistID", data.id);
     return data.id;
   } catch (error) {
     console.error("Error creating Gist:", error);
@@ -73,13 +77,9 @@ export const createOrUpdateGist = async (settings) => {
  * @returns {boolean} True if successful, false otherwise.
  */
 export const updateGist = async (gistID, settings) => {
-  const token = localStorage.getItem("githubToken");
-  if (!token) {
-    alert("GitHub authentication required.");
-    return false;
-  }
-
   try {
+    const token = getGitHubToken();
+
     const response = await fetch(`${GITHUB_API_URL}/gists/${gistID}`, {
       method: "PATCH",
       headers: {
@@ -104,6 +104,26 @@ export const updateGist = async (gistID, settings) => {
 };
 
 /**
+ * Creates a new Gist or updates an existing one with user settings.
+ * @param {Object} settings - The settings to save.
+ * @returns {string|null} The Gist ID if successful, null otherwise.
+ */
+export const syncGist = async (settings) => {
+  try {
+    let gist = await getUserSettingsGist();
+    if (gist) {
+      console.log("Existing Gist found. Updating instead of creating a new one.");
+      return (await updateGist(gist.id, settings)) ? gist.id : null;
+    } else {
+      return await createGist(settings);
+    }
+  } catch (error) {
+    console.error("Error syncing settings to Gist:", error);
+    return null;
+  }
+};
+
+/**
  * Imports settings from a GitHub Gist.
  * @param {string} gistID - The Gist ID to fetch.
  * @returns {Object|null} The imported settings if successful, null otherwise.
@@ -124,7 +144,7 @@ export const importFromGist = async (gistID) => {
 };
 
 /**
- * Logs out from GitHub Sync by removing token and Gist ID from localStorage.
+ * Logs out from GitHub Sync by removing the token and Gist ID from localStorage.
  */
 export const logoutGitHub = () => {
   localStorage.removeItem("githubToken");
