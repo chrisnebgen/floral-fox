@@ -13,17 +13,16 @@ const DEFAULT_IMAGE = 'https://via.placeholder.com/1200x300?text=Default+Cover+I
 const MainLayout = () => {
   const [userName, setUserName] = useState(localStorage.getItem('userName') || 'User');
   const [coverImage, setCoverImage] = useState(localStorage.getItem('coverImage') || DEFAULT_IMAGE);
+  const [linksData, setLinksData] = useState(JSON.parse(localStorage.getItem('linksData')) || []);
 
   useEffect(() => {
     const savedName = localStorage.getItem('userName');
     const savedImage = localStorage.getItem('coverImage');
+    const savedLinks = JSON.parse(localStorage.getItem('linksData')) || [];
 
     if (savedName) setUserName(savedName);
-    if (savedImage) {
-      setCoverImage(savedImage);
-    } else {
-      setCoverImage(DEFAULT_IMAGE);
-    }
+    if (savedImage) setCoverImage(savedImage);
+    if (savedLinks.length > 0) setLinksData(savedLinks);
   }, []);
 
   return (
@@ -33,8 +32,10 @@ const MainLayout = () => {
         setUserName={setUserName}
         coverImage={coverImage}
         setCoverImage={setCoverImage}
+        linksData={linksData}
+        setLinksData={setLinksData}
       />
-      
+
       <Container>
         <CoverImage coverImage={coverImage} />
         <Greeting userName={userName} />
@@ -43,7 +44,7 @@ const MainLayout = () => {
       </Container>
 
       <Container>
-        <LinksGrid />
+        <LinksGrid linksData={linksData} setLinksData={setLinksData} />
       </Container>
     </div>
   );
