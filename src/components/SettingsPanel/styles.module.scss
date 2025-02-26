@@ -1,6 +1,20 @@
 @use '../../styles/variables';
 @use 'sass:color';
 
+.standardButton {
+  padding: 6px;
+  border-radius: 5px;
+  min-height: 12px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
 /* Settings Button (Cog Icon) */
 .settingsButton {
   position: fixed;
@@ -150,7 +164,7 @@
   }
 }
 
-/* Import & Export Buttons */
+/* Import, Export, Sync, & Logout buttons */
 .importExportContainer {
   display: flex;
   flex-direction: column;
@@ -160,18 +174,10 @@
 }
 
 .exportButton,
-.importButton {
-  padding: 6px;
-  border-radius: 5px;
-  min-height: 12px;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
+.importButton,
+.syncButton,
+.logoutButton {
+  @extend .standardButton;
 }
 
 .exportButton {

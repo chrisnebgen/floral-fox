@@ -2,7 +2,7 @@
   "name": "floral-fox",
   "private": true,
   "version": "0.0.0",
-  "homepage": "",
+  "homepage": "https://chrisnebgen.github.io/floral-fox/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
