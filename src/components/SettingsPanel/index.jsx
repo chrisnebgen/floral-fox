@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaCog, FaTimes, FaFileImport, FaFileExport, FaGithub, FaSignOutAlt } from "react-icons/fa";
 import { loginWithGitHub, getGitHubToken } from "../../utilities/githubAuth";
-import { createOrUpdateGist, updateGist, importFromGist } from "../../utilities/gistStorage";
+import { syncGist, importFromGist, logoutGitHub } from "../../utilities/gistStorage";
 import styles from "./styles.module.scss";
 
 const SettingsPanel = ({ userName, setUserName, coverImage, setCoverImage, linksData, setLinksData }) => {
@@ -12,11 +12,15 @@ const SettingsPanel = ({ userName, setUserName, coverImage, setCoverImage, links
   const [gistID, setGistID] = useState(localStorage.getItem("gistID") || "");
 
   useEffect(() => {
-    const token = getGitHubToken();
-    if (token) {
-      setGithubToken(token);
-      localStorage.setItem("githubToken", token);
-      window.history.replaceState({}, document.title, "/");
+    try {
+      const token = getGitHubToken();
+      if (token) {
+        setGithubToken(token);
+        localStorage.setItem("githubToken", token);
+        window.history.replaceState({}, document.title, "/");
+      }
+    } catch (error) {
+      console.warn("GitHub token not found or invalid.");
     }
 
     const savedName = localStorage.getItem("userName");
@@ -45,17 +49,13 @@ const SettingsPanel = ({ userName, setUserName, coverImage, setCoverImage, links
     };
 
     if (githubToken) {
-      if (!gistID) {
-        const newGistID = await createOrUpdateGist(settings);
-        if (newGistID) {
-          setGistID(newGistID);
-          localStorage.setItem("gistID", newGistID);
-        }
+      const newGistID = await syncGist(settings);
+      if (newGistID) {
+        setGistID(newGistID);
+        localStorage.setItem("gistID", newGistID);
+        alert("Settings successfully synced to GitHub.");
       } else {
-        const success = await updateGist(gistID, settings);
-        if (!success) {
-          alert("Failed to update GitHub Sync. Ensure the Gist exists or re-sync.");
-        }
+        alert("GitHub sync failed. Please check your authentication.");
       }
     } else {
       const blob = new Blob([JSON.stringify(settings, null, 2)], { type: "application/json" });
@@ -119,9 +119,10 @@ const SettingsPanel = ({ userName, setUserName, coverImage, setCoverImage, links
     setLinksData(importedSettings.linksData);
   };
 
-  const logoutGitHub = () => {
-    localStorage.removeItem("githubToken");
+  const handleLogoutGitHub = () => {
+    logoutGitHub();
     setGithubToken("");
+    setGistID("");
     alert("You have logged out of GitHub Sync.");
   };
 
@@ -159,7 +160,7 @@ const SettingsPanel = ({ userName, setUserName, coverImage, setCoverImage, links
             <FaGithub /> {githubToken ? "Update GitHub Sync" : "Sync with GitHub"}
           </button>
           {githubToken && (
-            <button className={styles.logoutButton} onClick={logoutGitHub}>
+            <button className={styles.logoutButton} onClick={handleLogoutGitHub}>
               <FaSignOutAlt /> Logout GitHub
             </button>
           )}
