@@ -1,6 +1,7 @@
 @use '../../styles/variables';
 @use 'sass:color';
 
+/* Settings Button (Cog Icon) */
 .settingsButton {
   position: fixed;
   top: 15px;
@@ -23,6 +24,7 @@
   }
 }
 
+/* Panel Container */
 .settingsPanel {
   position: fixed;
   top: 0;
@@ -36,14 +38,14 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  justify-content: flex-start;
   z-index: 999;
+
+  &.open {
+    right: 0;
+  }
 }
 
-.settingsPanel.open {
-  right: 0;
-}
-
+/* Panel Header */
 .settingsHeader {
   display: flex;
   justify-content: center;
@@ -73,6 +75,7 @@
   }
 }
 
+/* Panel Content */
 .settingsContent {
   display: flex;
   flex-direction: column;
@@ -86,8 +89,10 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
 }
 
+/* Labels and Inputs */
 .settingsLabel {
   font-size: 0.85rem;
   color: variables.$default;
@@ -99,20 +104,18 @@
   width: 100%;
   max-width: 200px;
   height: 30px;
-  max-height: 1.5rem;
   padding: 5px;
   border-radius: 4px;
   border: 1px solid variables.$default;
   font-size: 0.9rem;
 }
 
+/* Button Container */
 .buttonContainer {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   gap: 10px;
   margin-top: 10px;
-  flex-wrap: nowrap;
 }
 
 .saveButton,
@@ -124,12 +127,10 @@
   font-weight: bold;
   cursor: pointer;
   font-size: 0.9rem;
-  width: 50%;
   min-width: 100px;
   text-align: center;
   white-space: nowrap;
 }
-
 
 .saveButton {
   background: variables.$success;
@@ -146,5 +147,59 @@
 
   &:hover {
     background: color.adjust(variables.$error, $lightness: -10%);
+  }
+}
+
+/* Import & Export Buttons */
+.importExportContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.exportButton,
+.importButton {
+  padding: 6px;
+  border-radius: 5px;
+  min-height: 12px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.exportButton {
+  background: variables.$default;
+  color: variables.$font-color;
+
+  &:hover {
+    background: color.adjust(variables.$default, $lightness: -10%);
+  }
+}
+
+.importButton {
+  background: variables.$success;
+  color: variables.$font-color;
+  position: relative;
+  overflow: hidden;
+
+  input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  &:hover {
+    background: color.adjust(variables.$success, $lightness: -10%);
   }
 }

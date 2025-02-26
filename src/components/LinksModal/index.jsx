@@ -46,7 +46,7 @@ const LinksModal = ({ linksData, setLinksData, closeModal }) => {
   const saveChanges = () => {
     if (editableLinks.length === 0) return;
     setLinksData(editableLinks);
-    localStorage.setItem('userLinks', JSON.stringify(editableLinks));
+    localStorage.setItem('linksData', JSON.stringify(editableLinks));
     closeModal();
   };
 
@@ -70,9 +70,11 @@ const LinksModal = ({ linksData, setLinksData, closeModal }) => {
                             className={styles.categoryInput}
                             value={category.heading}
                             onChange={(e) => {
-                              const updatedLinks = [...editableLinks];
-                              updatedLinks[categoryIndex].heading = e.target.value;
-                              setEditableLinks(updatedLinks);
+                              setEditableLinks((prevLinks) =>
+                                prevLinks.map((cat, index) =>
+                                  index === categoryIndex ? { ...cat, heading: e.target.value } : cat
+                                )
+                              );
                             }}
                           />
                           <button className={styles.deleteButton} onClick={() => {
@@ -95,9 +97,18 @@ const LinksModal = ({ linksData, setLinksData, closeModal }) => {
                                         value={link.label}
                                         placeholder="Label"
                                         onChange={(e) => {
-                                          const updatedLinks = [...editableLinks];
-                                          updatedLinks[categoryIndex].links[linkIndex].label = e.target.value;
-                                          setEditableLinks(updatedLinks);
+                                          setEditableLinks((prevLinks) =>
+                                            prevLinks.map((cat, catIdx) =>
+                                              catIdx === categoryIndex
+                                                ? {
+                                                    ...cat,
+                                                    links: cat.links.map((lnk, lnkIdx) =>
+                                                      lnkIdx === linkIndex ? { ...lnk, label: e.target.value } : lnk
+                                                    ),
+                                                  }
+                                                : cat
+                                            )
+                                          );
                                         }}
                                       />
                                       <input
@@ -106,15 +117,28 @@ const LinksModal = ({ linksData, setLinksData, closeModal }) => {
                                         value={link.url}
                                         placeholder="URL"
                                         onChange={(e) => {
-                                          const updatedLinks = [...editableLinks];
-                                          updatedLinks[categoryIndex].links[linkIndex].url = e.target.value;
-                                          setEditableLinks(updatedLinks);
+                                          setEditableLinks((prevLinks) =>
+                                            prevLinks.map((cat, catIdx) =>
+                                              catIdx === categoryIndex
+                                                ? {
+                                                    ...cat,
+                                                    links: cat.links.map((lnk, lnkIdx) =>
+                                                      lnkIdx === linkIndex ? { ...lnk, url: e.target.value } : lnk
+                                                    ),
+                                                  }
+                                                : cat
+                                            )
+                                          );
                                         }}
                                       />
                                       <button className={styles.deleteButton} onClick={() => {
-                                        const updatedLinks = [...editableLinks];
-                                        updatedLinks[categoryIndex].links = updatedLinks[categoryIndex].links.filter((_, index) => index !== linkIndex);
-                                        setEditableLinks(updatedLinks);
+                                        setEditableLinks((prevLinks) =>
+                                          prevLinks.map((cat, catIdx) =>
+                                            catIdx === categoryIndex
+                                              ? { ...cat, links: cat.links.filter((_, lnkIdx) => lnkIdx !== linkIndex) }
+                                              : cat
+                                          )
+                                        );
                                       }}>
                                         <FaTrashAlt />
                                       </button>

@@ -9,16 +9,11 @@ const defaultLinks = [
   { heading: 'Tech', links: [{ label: 'GitHub', url: 'https://github.com' }, { label: 'StackOverflow', url: 'https://stackoverflow.com' }] },
 ];
 
-const LinksGrid = () => {
-  const [linksData, setLinksData] = useState(() => {
-    const storedLinks = localStorage.getItem('userLinks');
-    return storedLinks ? JSON.parse(storedLinks) : defaultLinks;
-  });
-
+const LinksGrid = ({ linksData, setLinksData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('userLinks', JSON.stringify(linksData));
+    localStorage.setItem('linksData', JSON.stringify(linksData));
   }, [linksData]);
 
   return (
@@ -37,17 +32,26 @@ const LinksGrid = () => {
                     <a href={link.url} target="_blank" rel="noopener noreferrer">
                       {link.label}
                     </a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className={styles.emptyMessage}>No links available</p>
-            )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className={styles.emptyMessage}>No links available</p>
+          )}
           </div>
         ))}
       </div>
 
-      {isModalOpen && <LinksModal linksData={linksData} setLinksData={setLinksData} closeModal={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <LinksModal
+          linksData={linksData}
+          setLinksData={(data) => {
+            setLinksData(data);
+            localStorage.setItem('linksData', JSON.stringify(data));
+          }}
+          closeModal={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 };
