@@ -4,9 +4,8 @@ import styles from './styles.module.scss';
 const getGreeting = (name) => {
   const hours = new Date().getHours();
 
-  // Greetings based upon hour
   if (hours >= 0 && hours < 8) return `Good Morning, ${name}`;
-  if (hours >= 8 && hours < 12) return `Good Aftermorning, ${name}`;
+  if (hours >= 8 && hours < 12) return `Good Day, ${name}`;
   if (hours >= 12 && hours < 18) return `Good Afternoon, ${name}`;
   if (hours >= 18 && hours < 22) return `Good Evening, ${name}`;
   
@@ -21,11 +20,23 @@ const Greeting = ({ userName }) => {
   }, [userName]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const updateGreeting = () => {
       setGreeting(getGreeting(userName));
-    }, 3600000);
+    };
+    updateGreeting();
 
-    return () => clearInterval(interval);
+    const now = new Date();
+    const nextHour = new Date(now);
+    nextHour.setHours(now.getHours() + 1, 0, 0, 0);
+    const delay = nextHour - now;
+
+    const timeout = setTimeout(() => {
+      updateGreeting();
+      const interval = setInterval(updateGreeting, 3600000);
+      return () => clearInterval(interval);
+    }, delay);
+
+    return () => clearTimeout(timeout);
   }, [userName]);
 
   return (

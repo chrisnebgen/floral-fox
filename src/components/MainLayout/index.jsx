@@ -11,19 +11,15 @@ import styles from './styles.module.scss';
 const DEFAULT_IMAGE = 'https://via.placeholder.com/1200x300?text=Default+Cover+Image';
 
 const MainLayout = () => {
-  const [userName, setUserName] = useState(localStorage.getItem('userName') || 'User');
-  const [coverImage, setCoverImage] = useState(localStorage.getItem('coverImage') || DEFAULT_IMAGE);
-  const [linksData, setLinksData] = useState(JSON.parse(localStorage.getItem('linksData')) || []);
+  const [userName, setUserName] = useState(() => localStorage.getItem('userName') || 'User');
+  const [coverImage, setCoverImage] = useState(() => localStorage.getItem('coverImage') || DEFAULT_IMAGE);
+  const [linksData, setLinksData] = useState(() => JSON.parse(localStorage.getItem('linksData')) || []);
 
   useEffect(() => {
-    const savedName = localStorage.getItem('userName');
-    const savedImage = localStorage.getItem('coverImage');
-    const savedLinks = JSON.parse(localStorage.getItem('linksData')) || [];
-
-    if (savedName) setUserName(savedName);
-    if (savedImage) setCoverImage(savedImage);
-    if (savedLinks.length > 0) setLinksData(savedLinks);
-  }, []);
+    localStorage.setItem('userName', userName);
+    localStorage.setItem('coverImage', coverImage);
+    localStorage.setItem('linksData', JSON.stringify(linksData));
+  }, [userName, coverImage, linksData]);
 
   return (
     <div className={styles.main}>

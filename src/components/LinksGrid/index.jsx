@@ -13,33 +13,51 @@ const LinksGrid = ({ linksData, setLinksData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('linksData', JSON.stringify(linksData));
+    if (linksData.length > 0) {
+      localStorage.setItem('linksData', JSON.stringify(linksData));
+    }
   }, [linksData]);
 
   return (
     <div className={styles.linksGridContainer}>
       <div className={styles.header}>
-        <FaEdit className={styles.editIcon} onClick={() => setIsModalOpen(true)} />
+        <button
+          className={styles.editButton}
+          onClick={() => setIsModalOpen(true)}
+          aria-label="Edit Links"
+        >
+          <FaEdit className={styles.editIcon} />
+        </button>
       </div>
+
       <div className={styles.linksGrid}>
-        {linksData.map((category, index) => (
-          <div key={index} className={styles.column}>
-            <h3>{category.heading}</h3>
-            {category.links.length > 0 ? (
-              <ul>
-                {category.links.map((link, i) => (
-                  <li key={i}>
-                    <a href={link.url} target="_blank" rel="noopener noreferrer">
-                      {link.label}
-                    </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className={styles.emptyMessage}>No links available</p>
-          )}
-          </div>
-        ))}
+        {linksData.length > 0 ? (
+          linksData.map((category, index) => (
+            <div key={index} className={styles.column}>
+              <h3>{category.heading}</h3>
+              {category.links.length > 0 ? (
+                <ul>
+                  {category.links.map((link, i) => (
+                    <li key={i}>
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Open ${link.label} in a new tab`}
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className={styles.emptyMessage}>No links available</p>
+              )}
+            </div>
+          ))
+        ) : (
+          <p className={styles.emptyMessage}>No categories available</p>
+        )}
       </div>
 
       {isModalOpen && (
