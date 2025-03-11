@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FaGoogle, FaFeather } from 'react-icons/fa';
 import { DiBingSmall } from 'react-icons/di';
 import styles from './styles.module.scss';
 
+const searchEngines = {
+  google: { url: 'https://www.google.com/search?q=', icon: <FaGoogle />, label: 'Google Search' },
+  bing: { url: 'https://www.bing.com/search?q=', icon: <DiBingSmall />, label: 'Bing Search' },
+  duckduckgo: { url: 'https://duckduckgo.com/?q=', icon: <FaFeather />, label: 'DuckDuckGo Search' }
+};
+
 const SearchBar = () => {
   const [query, setQuery] = useState('');
 
-  const searchEngines = {
-    google: { url: 'https://www.google.com/search?q=', icon: <FaGoogle /> },
-    bing: { url: 'https://www.bing.com/search?q=', icon: <DiBingSmall /> },
-    duckduckgo: { url: 'https://duckduckgo.com/?q=', icon: <FaFeather /> }
-  };
-
-  const handleSearch = (engine) => {
+  const handleSearch = useCallback((engine) => {
     if (query.trim() !== '') {
       window.open(searchEngines[engine].url + encodeURIComponent(query), '_blank');
+    }
+  }, [query]);
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch('google');
     }
   };
 
@@ -26,6 +32,8 @@ const SearchBar = () => {
           placeholder="Search..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyPress}
+          aria-label="Search input"
         />
         <div className={styles.searchIcons}>
           {Object.keys(searchEngines).map((engine) => (
@@ -34,6 +42,7 @@ const SearchBar = () => {
               type="button"
               onClick={() => handleSearch(engine)}
               className={styles.iconButton}
+              aria-label={searchEngines[engine].label}
             >
               {searchEngines[engine].icon}
             </button>
