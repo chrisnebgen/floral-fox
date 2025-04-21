@@ -108,31 +108,39 @@ const SettingsPanel = ({
         <FaCog />
       </button>
 
-      <div className={`${styles.settingsPanel} ${isOpen ? styles.open : ''}`}>
+      <div className={`${styles.settingsPanel} ${isOpen ? styles.open : ''}`} role="dialog" aria-modal="true" aria-labelledby="settings-title">
         <div className={styles.settingsHeader}>
-          <h2 className={styles.settingsTitle}>Settings</h2>
-          <button className={styles.closeButton} onClick={() => setIsOpen(false)}>
+          <h2 id="settings-title" className={styles.settingsTitle}>Settings</h2>
+          <button className={styles.closeButton} onClick={() => setIsOpen(false)} aria-label="Close Settings" title="Close">
             <FaTimes />
           </button>
         </div>
 
-        <div className={styles.settingsForm}>
-          <label className={styles.settingsLabel}>Name:</label>
+        <form
+          className={styles.settingsForm}
+          onSubmit={(e) => {
+            e.preventDefault();
+            saveSettings();
+          }}
+        >
+          <label className={styles.settingsLabel} htmlFor="user-name">Name:</label>
           <input
+            id="user-name"
             type="text"
             className={styles.settingsInput}
             value={nameInput}
             onChange={(e) => setNameInput(e.target.value)}
           />
 
-          <label className={styles.settingsLabel}>Cover Image URL:</label>
+          <label className={styles.settingsLabel} htmlFor="cover-image">Cover Image URL:</label>
           <input
+            id="cover-image"
             type="text"
             className={styles.settingsInput}
             value={imageInput}
             onChange={(e) => setImageInput(e.target.value)}
           />
-        </div>
+        </form>
 
         <div className={styles.themeButtonContainer}>
           <button className={styles.exportButton} onClick={openThemeModal}>

@@ -40,7 +40,7 @@ const Greeting = ({ userName }) => {
   }, [userName]);
 
   return (
-    <div className={styles.greetingContainer}>
+    <div className={styles.greetingContainer} role="status" aria-live="polite">
       <h2 className={styles.greetingMessage}>{greeting}</h2>
     </div>
   );
