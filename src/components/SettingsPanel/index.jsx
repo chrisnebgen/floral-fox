@@ -2,12 +2,21 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { FaCog, FaTimes, FaFileImport, FaFileExport } from 'react-icons/fa';
 import styles from './styles.module.scss';
 
-const SettingsPanel = ({ userName, setUserName, coverImage, setCoverImage, linksData, setLinksData }) => {
+const SettingsPanel = ({
+  userName,
+  setUserName,
+  coverImage,
+  setCoverImage,
+  linksData,
+  setLinksData,
+  themeColors,
+  setThemeColors,
+  openThemeModal
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [nameInput, setNameInput] = useState(userName);
   const [imageInput, setImageInput] = useState(coverImage);
 
-  // Sync state when props change from any source.
   useEffect(() => {
     setNameInput(userName);
     setImageInput(coverImage);
@@ -17,6 +26,7 @@ const SettingsPanel = ({ userName, setUserName, coverImage, setCoverImage, links
     localStorage.setItem('userName', nameInput);
     localStorage.setItem('coverImage', imageInput);
     localStorage.setItem('linksData', JSON.stringify(linksData));
+    localStorage.setItem('themeColors', JSON.stringify(themeColors));
     setUserName(nameInput);
     setCoverImage(imageInput);
     setIsOpen(false);
@@ -28,6 +38,7 @@ const SettingsPanel = ({ userName, setUserName, coverImage, setCoverImage, links
       userName: localStorage.getItem('userName') || 'User',
       coverImage: localStorage.getItem('coverImage') || '',
       linksData: JSON.parse(localStorage.getItem('linksData')) || [],
+      themeColors: JSON.parse(localStorage.getItem('themeColors')) || {},
     };
 
     const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
@@ -57,22 +68,21 @@ const SettingsPanel = ({ userName, setUserName, coverImage, setCoverImage, links
           return;
         }
 
-        const confirmImport = window.confirm(
-          'Importing will overwrite your settings. Do you want to continue?'
-        );
+        const confirmImport = window.confirm('Importing will overwrite your settings. Do you want to continue?');
         if (!confirmImport) return;
 
-        // Update localStorage
         localStorage.setItem('userName', importedSettings.userName);
         localStorage.setItem('coverImage', importedSettings.coverImage);
         localStorage.setItem('linksData', JSON.stringify(importedSettings.linksData));
 
-        // Update state
+        if (typeof importedSettings.themeColors === 'object') {
+          localStorage.setItem('themeColors', JSON.stringify(importedSettings.themeColors));
+          setThemeColors(importedSettings.themeColors);
+        }
+
         setUserName(importedSettings.userName);
         setCoverImage(importedSettings.coverImage);
         setLinksData(importedSettings.linksData);
-
-        // Update input fields
         setNameInput(importedSettings.userName);
         setImageInput(importedSettings.coverImage);
 
@@ -83,7 +93,7 @@ const SettingsPanel = ({ userName, setUserName, coverImage, setCoverImage, links
     };
 
     reader.readAsText(file);
-  }, [setUserName, setCoverImage, setLinksData]);
+  }, [setUserName, setCoverImage, setLinksData, setThemeColors]);
 
   const isDisabled = nameInput === userName && imageInput === coverImage;
 
@@ -108,10 +118,26 @@ const SettingsPanel = ({ userName, setUserName, coverImage, setCoverImage, links
 
         <div className={styles.settingsForm}>
           <label className={styles.settingsLabel}>Name:</label>
-          <input type="text" className={styles.settingsInput} value={nameInput} onChange={(e) => setNameInput(e.target.value)} />
+          <input
+            type="text"
+            className={styles.settingsInput}
+            value={nameInput}
+            onChange={(e) => setNameInput(e.target.value)}
+          />
 
           <label className={styles.settingsLabel}>Cover Image URL:</label>
-          <input type="text" className={styles.settingsInput} value={imageInput} onChange={(e) => setImageInput(e.target.value)} />
+          <input
+            type="text"
+            className={styles.settingsInput}
+            value={imageInput}
+            onChange={(e) => setImageInput(e.target.value)}
+          />
+        </div>
+
+        <div className={styles.themeButtonContainer}>
+          <button className={styles.exportButton} onClick={openThemeModal}>
+            Customize Theme
+          </button>
         </div>
 
         <div className={styles.buttonContainer}>
@@ -120,9 +146,19 @@ const SettingsPanel = ({ userName, setUserName, coverImage, setCoverImage, links
         </div>
 
         <div className={styles.importExportContainer}>
-          <button className={styles.exportButton} onClick={exportSettings}><FaFileExport /> Export Settings</button>
-          <label className={styles.importButton}><FaFileImport /> Import Settings
-            <input type="file" accept=".json" onChange={(event) => { importSettings(event); event.target.value = ""; }} />
+          <button className={styles.exportButton} onClick={exportSettings}>
+            <FaFileExport /> Export Settings
+          </button>
+          <label className={styles.importButton}>
+            <FaFileImport /> Import Settings
+            <input
+              type="file"
+              accept=".json"
+              onChange={(event) => {
+                importSettings(event);
+                event.target.value = '';
+              }}
+            />
           </label>
         </div>
       </div>

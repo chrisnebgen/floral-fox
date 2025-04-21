@@ -2,8 +2,17 @@
 @use './mixins';
 @use './typography';
 
+:root {
+  --font-color: #{variables.$font-color};
+  --primary-color: #{variables.$primary};
+  --default-color: #{variables.$default};
+  --info-color: #{variables.$info};
+  --heading-color: #{variables.$heading};
+  --background-color: #{variables.$background};
+}
+
 body {
-  background-color: variables.$background;
+  background-color: var(--background-color);
 }
 
 #root {
@@ -12,5 +21,5 @@ body {
   padding: 2rem;
   text-align: center;
   font-family: typography.$font-family;
-  color: variables.$font-color;
+  color: var(--font-color);
 }
