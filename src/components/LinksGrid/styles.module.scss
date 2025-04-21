@@ -23,11 +23,11 @@
 
 .editIcon {
   font-size: 1.2rem;
-  color: variables.$default;
+  color: var(--accent-color);
   transition: color 0.3s ease-in-out;
 
   &:hover {
-    color: variables.$font-color;
+    color: var(--accent-color-darker);
   }
 }
 
@@ -47,6 +47,7 @@
     h3 {
       margin-bottom: 10px;
       text-align: center;
+      color: var(--heading-color);
     }
 
     ul {
@@ -61,12 +62,12 @@
 
     a {
       text-decoration: none;
-      color: variables.$primary;
+      color: var(--font-color);
       transition: color 0.2s ease-in-out;
 
       &:hover {
         text-decoration: underline;
-        color: variables.$font-color;
+        color: var(--font-color-darker);
       }
     }
   }
@@ -74,7 +75,7 @@
 
 .emptyMessage {
   font-size: 0.9rem;
-  color: variables.$default;
+  color: var(--default-color);
   text-align: center;
   margin-top: 10px;
 }
