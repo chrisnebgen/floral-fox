@@ -11,12 +11,13 @@ const defaultLinks = [
 
 const LinksGrid = ({ linksData, setLinksData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const safeLinksData = (Array.isArray(linksData) && linksData.length > 0) ? linksData : defaultLinks;
 
   useEffect(() => {
-    if (linksData.length > 0) {
-      localStorage.setItem('linksData', JSON.stringify(linksData));
+    if (safeLinksData.length > 0) {
+      localStorage.setItem('linksData', JSON.stringify(safeLinksData));
     }
-  }, [linksData]);
+  }, [safeLinksData]);
 
   return (
     <div className={styles.linksGridContainer}>
@@ -31,10 +32,15 @@ const LinksGrid = ({ linksData, setLinksData }) => {
       </div>
 
       <div className={styles.linksGrid}>
-        {linksData.length > 0 ? (
-          linksData.map((category, index) => (
-            <div key={index} className={styles.column}>
-              <h3>{category.heading}</h3>
+        {safeLinksData.length > 0 ? (
+          safeLinksData.map((category, index) => (
+            <div 
+              key={index}
+              className={styles.column}
+              role="region"
+              aria-labelledby={`category-${index}`}
+            >
+              <h3 id={`category-${index}`}>{category.heading}</h3>
               {category.links.length > 0 ? (
                 <ul>
                   {category.links.map((link, i) => (
@@ -62,7 +68,7 @@ const LinksGrid = ({ linksData, setLinksData }) => {
 
       {isModalOpen && (
         <LinksModal
-          linksData={linksData}
+          linksData={safeLinksData}
           setLinksData={(data) => {
             setLinksData(data);
             localStorage.setItem('linksData', JSON.stringify(data));

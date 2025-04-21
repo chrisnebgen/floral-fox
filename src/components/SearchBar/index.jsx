@@ -26,16 +26,23 @@ const SearchBar = () => {
 
   return (
     <div className={styles.searchBarContainer}>
-      <form className={styles.searchBar} onSubmit={(e) => e.preventDefault()}>
+      <form
+        className={styles.searchBar}
+        role="search"
+        aria-label="Site search"
+        onSubmit={(e) => e.preventDefault()}
+      >
         <input
-          type="text"
+          type="search"
           placeholder="Search..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKeyPress}
           aria-label="Search input"
         />
-        <div className={styles.searchIcons}>
+
+        <fieldset className={styles.searchEngines}>
+          <legend className="visually-hidden">Choose a search engine</legend>
           {Object.keys(searchEngines).map((engine) => (
             <button
               key={engine}
@@ -47,7 +54,7 @@ const SearchBar = () => {
               {searchEngines[engine].icon}
             </button>
           ))}
-        </div>
+        </fieldset>
       </form>
     </div>
   );

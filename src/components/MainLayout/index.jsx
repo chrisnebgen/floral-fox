@@ -55,7 +55,7 @@ const MainLayout = () => {
   }, [themeColors]);
 
   return (
-    <div className={styles.main}>
+    <main className={styles.main}>
       <SettingsPanel
         userName={userName}
         setUserName={setUserName}
@@ -74,17 +74,17 @@ const MainLayout = () => {
         setThemeColors={setThemeColors}
       />
 
-      <Container>
+      <Container aria-labelledby="greeting-search">
         <CoverImage coverImage={coverImage} />
         <Greeting userName={userName} />
         <DateTimeDisplay />
         <SearchBar />
       </Container>
 
-      <Container>
+      <Container aria-labelledby="links-area">
         <LinksGrid linksData={linksData} setLinksData={setLinksData} />
       </Container>
-    </div>
+    </main>
   );
 };
 
