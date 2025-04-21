@@ -1,4 +1,5 @@
 @use '../../styles/variables';
+@use 'sass:color';
 
 .linksGridContainer {
   position: relative;
@@ -23,11 +24,12 @@
 
 .editIcon {
   font-size: 1.2rem;
-  color: var(--accent-color);
+  color: var(--accent-color-darkest, #{color.adjust(variables.$default, $lightness: -15%)});
   transition: color 0.3s ease-in-out;
 
-  &:hover {
-    color: var(--accent-color-darker);
+  &:hover,
+  &:focus {
+    color: var(--accent-color, #{variables.$default});
   }
 }
 
@@ -47,7 +49,7 @@
     h3 {
       margin-bottom: 10px;
       text-align: center;
-      color: var(--heading-color);
+      color: var(--heading-color, #{variables.$heading});
     }
 
     ul {
@@ -58,24 +60,25 @@
       li {
         margin: 5px 0;
       }
-    }
+    }   
+  }
+  a {
+    text-decoration: none;
+    color: var(--font-color, #{variables.$font-color});
+    transition: color 0.2s ease-in-out;
 
-    a {
-      text-decoration: none;
-      color: var(--font-color);
-      transition: color 0.2s ease-in-out;
-
-      &:hover {
-        text-decoration: underline;
-        color: var(--font-color-darker);
-      }
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+      color: var(--font-color-darker, #{color.adjust(variables.$font-color, $lightness: -10%)});
+      text-decoration-color: var(--accent-color, #{variables.$primary})
     }
   }
 }
 
 .emptyMessage {
   font-size: 0.9rem;
-  color: var(--default-color);
+  color: var(--default-color, #{variables.$font-color});
   text-align: center;
   margin-top: 10px;
 }

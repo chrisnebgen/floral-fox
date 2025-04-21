@@ -47,8 +47,10 @@ const MainLayout = () => {
       const base = tinycolor(value);
       if (base.isValid()) {
         const darker = base.darken(10).toString();
+        const darkest = base.darken(15).toString();
         const lighter = base.lighten(10).toString();
         document.documentElement.style.setProperty(`--${key}-darker`, darker);
+        document.documentElement.style.setProperty(`--${key}-darkest`, darkest);
         document.documentElement.style.setProperty(`--${key}-lighter`, lighter);
       }
     });
