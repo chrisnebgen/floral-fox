@@ -1,4 +1,5 @@
 @use '../../styles/variables';
+@use '../../styles/mixins';
 @use 'sass:color';
 
 .modalOverlay {
@@ -92,11 +93,7 @@
 }
 
 .unsaved {
-  text-align: center;
-  color: variables.$warning;
-  font-weight: bold;
-  padding: 10px 0;
-  font-size: 0.95rem;
+  @include mixins.unsaved;
 }
 
 .footer {
@@ -138,3 +135,4 @@
     }
   }
 }
+ 

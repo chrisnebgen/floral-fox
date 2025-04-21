@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaTrashAlt } from 'react-icons/fa';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import styles from './styles.module.scss';
 
 const LinksModal = ({ linksData, setLinksData, closeModal }) => {
   const [editableLinks, setEditableLinks] = useState([...linksData]);
+  const [hasChanges, setHasChanges] = useState(false);
+
+  useEffect(() => {
+    setHasChanges(JSON.stringify(editableLinks) !== JSON.stringify(linksData));
+  }, [editableLinks, linksData]);
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -169,7 +174,15 @@ const LinksModal = ({ linksData, setLinksData, closeModal }) => {
           + Add Category
         </button>
 
-        <button className={styles.saveButton} onClick={saveChanges} disabled={editableLinks.length === 0}>
+        {hasChanges && (
+          <div className={styles.unsaved}>You have unsaved changes.</div>
+        )}
+
+        <button
+          className={styles.saveButton}
+          onClick={saveChanges}
+          disabled={!hasChanges}
+        >
           Save Changes
         </button>
       </div>
