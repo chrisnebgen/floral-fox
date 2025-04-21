@@ -66,12 +66,12 @@
   background: transparent;
   cursor: pointer;
   font-size: 1.5rem;
-  color: var(--accent-color, #{variables.$default});
+  color: var(--accent-color-darkest, #{color.adjust(variables.$default, $lightness: -15%)});
   transition: color 0.3s ease-in-out;
 
   &:hover,
   &:focus {
-    color: var(--accent-color-darker, #{color.adjust(variables.$default, $lightness: -10%)});
+    color: var(--accent-color, #{variables.$default});
     outline: none;
   }
 }
