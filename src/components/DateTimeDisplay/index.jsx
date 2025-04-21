@@ -29,7 +29,12 @@ const DateTimeDisplay = () => {
     return `${hours}:${minutes}:${seconds} ${timeZone}`;
   };
 
-  return <div className={styles.dateTime}>{formatTime(dateTime)}</div>;
+  return (
+    <div className={styles.dateTime} role="status" aria-live="polite">
+      <span className="visually-hidden">Current time: </span>
+      <time dateTime={dateTime.toISOString()}>{formatTime(dateTime)}</time>
+    </div>
+  );
 };
 
 export default DateTimeDisplay;

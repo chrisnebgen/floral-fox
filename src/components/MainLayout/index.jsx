@@ -47,15 +47,17 @@ const MainLayout = () => {
       const base = tinycolor(value);
       if (base.isValid()) {
         const darker = base.darken(10).toString();
+        const darkest = base.darken(15).toString();
         const lighter = base.lighten(10).toString();
         document.documentElement.style.setProperty(`--${key}-darker`, darker);
+        document.documentElement.style.setProperty(`--${key}-darkest`, darkest);
         document.documentElement.style.setProperty(`--${key}-lighter`, lighter);
       }
     });
   }, [themeColors]);
 
   return (
-    <div className={styles.main}>
+    <main className={styles.main}>
       <SettingsPanel
         userName={userName}
         setUserName={setUserName}
@@ -74,17 +76,17 @@ const MainLayout = () => {
         setThemeColors={setThemeColors}
       />
 
-      <Container>
+      <Container aria-labelledby="greeting-search">
         <CoverImage coverImage={coverImage} />
         <Greeting userName={userName} />
         <DateTimeDisplay />
         <SearchBar />
       </Container>
 
-      <Container>
+      <Container aria-labelledby="links-area">
         <LinksGrid linksData={linksData} setLinksData={setLinksData} />
       </Container>
-    </div>
+    </main>
   );
 };
 

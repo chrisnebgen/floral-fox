@@ -1,6 +1,7 @@
 @use './variables';
 @use './mixins';
 @use './typography';
+@use './utility';
 
 :root {
   --font-color: #{variables.$font-color};
