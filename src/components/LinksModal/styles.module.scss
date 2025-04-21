@@ -14,7 +14,7 @@
 }
 
 .modal {
-  background: variables.$primary;
+  background: color.adjust(variables.$spun-pearl, $lightness: -30%);
   padding: 20px;
   border-radius: 10px;
   width: 80%;
@@ -28,7 +28,7 @@
   overflow: hidden;
 
   h2 {
-    color: variables.$default;
+    color: variables.$white-wedding;
   }
 }
 
@@ -40,10 +40,10 @@
   border: none;
   background: none;
   font-size: 18px;
-  color: variables.$default;
+  color: variables.$spun-pearl;
 
   &:hover {
-    color: variables.$error;
+    color: variables.$pomegranate;
   }
 }
 
@@ -66,12 +66,12 @@
 }
 
 .editContainer::-webkit-scrollbar-thumb {
-  background-color: variables.$default;
+  background-color: color.adjust(variables.$spun-pearl, $lightness: -40%);
   border-radius: 4px;
 }
 
 .category {
-  background: #fff;
+  background: variables.$white-wedding;
   padding: 12px;
   border-radius: 8px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -91,7 +91,7 @@
 
 .categoryInput {
   flex: 1;
-  border: 1px solid variables.$primary;
+  border: 1px solid color.adjust(variables.$spun-pearl, $lightness: -40%);
   border-radius: 5px;
   padding: 8px;
   width: calc(100% - 40px);
@@ -101,7 +101,7 @@
 .input {
   width: 100%;
   padding: 8px;
-  border: 1px solid variables.$primary;
+  border: 1px solid color.adjust(variables.$spun-pearl, $lightness: -40%);
   border-radius: 5px;
   margin: 5px 0;
   min-width: 0;
@@ -121,15 +121,15 @@
   cursor: pointer;
   border: none;
   border-radius: 5px;
-  background: variables.$default;
-  color: #fff;
+  background: variables.$fjord;
+  color: variables.$white-wedding;
   font-weight: bold;
   width: 100%;
   align-self: flex-end;
 }
 
 .addLinkButton:hover {
-  background: color.adjust(variables.$default, $lightness: -5%);
+  background: color.adjust(variables.$fjord, $lightness: -25%);
 }
 
 .deleteButton {
@@ -150,13 +150,13 @@
   cursor: pointer;
   border: none;
   border-radius: 5px;
-  background: variables.$default;
-  color: #fff;
+  background: variables.$fjord;
+  color: variables.$white-wedding;
   font-weight: bold;
   width: 100%;
 
   &:hover {
-    background: color.adjust(variables.$default, $lightness: -5%);
+    background: color.adjust(variables.$fjord, $lightness: -25%);
   }
 }
 

@@ -1,9 +1,8 @@
 @use '../../styles/variables';
-@use "sass:color";
+@use 'sass:color';
 
 .searchBarContainer {
   width: 100%;
-  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,18 +17,28 @@
   align-items: center;
   border-radius: 5px;
   overflow: hidden;
-  background: variables.$primary;
-  border: 1px solid variables.$primary;
+  background: var(--primary-color);
+  border: 1px solid var(--primary-color-darker);
   padding: 5px;
-}
 
-input {
-  flex: 4;
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  outline: none;
-  font-size: 1rem;
+  @media (max-width: 768px) {
+    max-width: 90%;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 95%;
+  }
+
+  input {
+    flex: 4;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    min-width: 50px;
+    max-width: 100%;
+  }
 }
 
 .searchIcons {
@@ -46,10 +55,12 @@ input {
   background: transparent;
   cursor: pointer;
   font-size: 1.5rem;
-  color: variables.$default;
+  color: var(--accent-color);
   transition: color 0.3s ease-in-out;
 
-  &:hover {
-    color: color.adjust(variables.$default, $lightness: -10%);
+  &:hover,
+  &:focus {
+    color: var(--accent-color-darker);
+    outline: none;
   }
 }

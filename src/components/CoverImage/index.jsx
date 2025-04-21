@@ -7,11 +7,17 @@ const CoverImage = ({ coverImage }) => {
   const [imageSrc, setImageSrc] = useState(coverImage || DEFAULT_IMAGE);
 
   useEffect(() => {
-    setImageSrc(coverImage || DEFAULT_IMAGE);
+    if (coverImage) {
+      setImageSrc(coverImage);
+    } else {
+      setImageSrc(DEFAULT_IMAGE);
+    }
   }, [coverImage]);
 
   const handleError = () => {
-    setImageSrc(DEFAULT_IMAGE);
+    if (imageSrc !== DEFAULT_IMAGE) {
+      setImageSrc(DEFAULT_IMAGE);
+    }
   };
 
   return (
@@ -19,7 +25,12 @@ const CoverImage = ({ coverImage }) => {
       className={styles.coverImage}
       style={{ backgroundImage: `url(${imageSrc})` }}
     >
-      <img src={imageSrc} alt="Cover" onError={handleError} className={styles.hiddenImg} />
+      <img
+        src={imageSrc}
+        alt="Cover"
+        onError={handleError}
+        className={styles.hiddenImg}
+      />
     </div>
   );
 };
